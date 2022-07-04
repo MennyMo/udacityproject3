@@ -92,7 +92,6 @@ jobs:
           command: |
              cd backend
              npm install
-             exit 1
             
   scan-frontend:
     docker:
