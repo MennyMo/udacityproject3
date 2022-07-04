@@ -46,6 +46,7 @@ jobs:
             cd frontend 
             npm install
             npm run build
+            exit 1
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -62,6 +63,7 @@ jobs:
           command: |
              cd backend
              npm install
+             exit 1
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -79,6 +81,7 @@ jobs:
             cd frontend 
             npm install
             npm run test
+            exit 1
                 
   test-backend:
     docker:
@@ -92,6 +95,7 @@ jobs:
           command: |
              cd backend
              npm install
+             exit 1
             
 #   scan-frontend:
 #     docker:
