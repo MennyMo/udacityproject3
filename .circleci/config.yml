@@ -150,10 +150,10 @@ jobs:
               --filters "Name=tag:project,Values=udapeople-backend-udapeople-kk1j287mollymz437" \
               --query 'Reservations[].Instances[].PublicIpAddress' \
               --output text >> ~/project/.circleci/ansible/inventory.txt
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/.circleci/ansible/inventory.txt
+      # - persist_to_workspace:
+      #     root: ~/
+      #     paths:
+      #       - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure      
 
 #   configure-infrastructure:
