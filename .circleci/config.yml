@@ -127,6 +127,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install tar utility
+          command: |
+            yum install -y tar gzip
+      - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
@@ -155,8 +159,8 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       # - run: exit 1
       # Here's where you will add some code to rollback on failure      
-      # - destroy-environment:
-      #     WORKFLOWID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          WORKFLOWID: ${CIRCLE_WORKFLOW_ID:0:7}
 #   configure-infrastructure:
 #     docker:
 #       # Docker image here that supports Ansible
