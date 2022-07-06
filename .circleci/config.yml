@@ -161,22 +161,29 @@ jobs:
       # Here's where you will add some code to rollback on failure      
       - destroy-environment:
           WORKFLOWID: ${CIRCLE_WORKFLOW_ID:0:7}
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#       # Here's where you will add some code to rollback on failure      
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["3f:cd:bd:b6:88:df:53:de:e1:3b:79:98:0c:8d:9c:45"]
+      - attach_workspace:
+          at: ~/    
+      - run:
+          name: Install dependencies
+          command: |
+            apk add curl
+            apk add --upgrade bash
+            apk add --update ansible
+            apk add openssh-client
+            pip3 install awscli
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      # Here's where you will add some code to rollback on failure      
 
 #   run-migrations:
 #     docker:
