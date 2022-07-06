@@ -199,6 +199,7 @@ jobs:
             cd backend
             npm install typescript
             npm add --dev typescript
+            npm i migrations
             npm i
             npm run migrations > migrations_dump.txt
       - run:
