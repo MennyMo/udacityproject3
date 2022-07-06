@@ -1,0 +1,10 @@
+
+> glee2@1.0.0 premigrations
+> npm run build
+
+
+> glee2@1.0.0 build
+> tsc
+
+src/main.ts(31,21): error TS1005: ',' expected.
+src/main.ts(32,5): error TS1128: Declaration or statement expected.
