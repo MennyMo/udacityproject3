@@ -182,23 +182,38 @@ jobs:
           name: Configure server
           command: |
             cd .circleci/ansible
-            ansible-playbook -i inventory.txt configure-server.yml
-      # Here's where you will add some code to rollback on failure      
+            ansible-playbook -i inventory.txt server.yml
+      # Here's where you will add some code to rollback on failure  
+      - destroy-environment:
+          WORKFLOWID: ${CIRCLE_WORKFLOW_ID:0:7}
+          
 
-#   run-migrations:
-#     docker:
-#       # Docker image here that supports NodeJS
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Run migrations
-#           command: |
-#             # Your code here
-#       - run:
-#           name: Send migration results to memstash
-#           command: |
-#             # Your code here
-#      # Here's where you will add some code to rollback on failure      
+  run-migrations:
+    docker:
+      - image: sleavely/node-awscli:14.x
+    steps:
+      - checkout
+      - run:
+          name: Run migrations
+          command: |
+            cd backend
+            cat .env
+            npm i
+            npm run migrations
+      - run:
+          name: Send migration results to memstash
+          command: |
+            echo "has been executed successfully" > ./migration_dump.txt
+            pwd && ls -al
+            if grep -q "has been executed successfully" ./migration_dump.txt 
+            then 
+              echo "has been executed successfully"
+              curl -H "Content-Type: text/plain" -H "token: ecdfc255-81e1-4056-9efa-2d7fa10812e1" --request PUT --data "1" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
+            else
+              echo "has failed"
+              curl -H "Content-Type: text/plain" -H "token: ecdfc255-81e1-4056-9efa-2d7fa10812e1" --request PUT --data "0" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
+            fi
+     # Here's where you will add some code to rollback on failure      
 
 #   deploy-frontend:
 #     docker:
