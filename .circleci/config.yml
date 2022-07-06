@@ -229,38 +229,51 @@ jobs:
       - attach_workspace:
           at: ~/   
       - run:
-          name: Install dependencies
-          command: |
-            # your code here
+          # name: Install dependencies
+          # command: |
+          #   # your code here
       - run:
           name: Get backend url
           command: |
-            # your code here
+            export BACKEND_IP=$(aws ec2 describe-instances...............)
             export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
+            # echo "${API_URL}"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
       - run:
           name: Deploy frontend objects
           command: |
-            # your code here
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
 #       # Here's where you will add some code to rollback on failure      
-                    
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
+      - destroy-environment:
+          WORKFLOWID: ${CIRCLE_WORKFLOW_ID:0:7}             
+  deploy-backend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["3f:cd:bd:b6:88:df:53:de:e1:3b:79:98:0c:8d:9c:45"]
+      - attach_workspace:
+          at: ~/  
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible rsync 
+            apk add curl
+            pip3 install awscli
+      - run:
+          name: Deploy backend
+          command: |
+            # your code here
 #       # Here's where you will add some code to rollback on failure  
-
+      # - destroy-environment:
+      #     WORKFLOWID: ${CIRCLE_WORKFLOW_ID:0:7}
 #   smoke-test:
 #     docker:
 #       # Lightweight Docker image 
@@ -339,8 +352,8 @@ workflows:
               only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
+      # - run-migrations:
+      #     requires: [configure-infrastructure]
   #     - deploy-frontend:
   #         requires: [run-migrations]
   #     - deploy-backend:
