@@ -207,8 +207,11 @@ jobs:
           command: |
             cd backend
             npm install
+            npm install -g npm-check-updates
+            ncu --upgrade
             npm run migrations > migrations_dump.txt
-            npm audit fix --force
+            npm install -g npm-check-updates
+            ncu --upgrade
       - run:
           name: Send migration results to KVdb
           command: |
