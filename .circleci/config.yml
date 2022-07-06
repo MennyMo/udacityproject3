@@ -13,24 +13,24 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name udapeople-backend-<<parameters.WORKFLOWID>> --region us-east-1
             aws cloudformation delete-stack --stack-name udapeople-frontend-<<parameters.WORKFLOWID>> --region us-east-1
-#   revert-migrations:
-#     description: Revert the last migration if successfully run in the current workflow.
-#     parameters:
-#       # Add parameter here     
-#     steps:
-#       - run:
-#           name: Revert migrations
-#           # Add when this will run
-#           command: |
-#             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-#             SUCCESS = 1
-#             if(( $SUCCESS==1 )); 
-#             then
-#             #  cd ~/project/backend
-#             #  npm install
-#             #  Add revert code here. You can find this in the Getting Started section.
-#               exit 1
-#             fi
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      # Add parameter here     
+    steps:
+      - run:
+          name: Revert migrations
+          # Add when this will run
+          command: |
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            SUCCESS = 1
+            if(( $SUCCESS==1 )); 
+            then
+            #  cd ~/project/backend
+            #  npm install
+            #  Add revert code here. You can find this in the Getting Started section.
+              exit 1
+            fi
             
 jobs:
   build-frontend:
@@ -197,7 +197,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:16.9.0
     steps:
       - checkout
       - restore_cache:
@@ -224,8 +224,8 @@ jobs:
               # curl -H "Content-Type: text/plain" -H "token: ecdfc255-81e1-4056-9efa-2d7fa10812e1" --request PUT --data "0" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
             fi
      # Here's where you will add some code to rollback on failure 
-    # - destroy-environment:
-    #       WORKFLOWID: ${CIRCLE_WORKFLOW_ID:0:7}
+    - revert-migrations:
+          ID: ${CIRCLE_WORKFLOW_ID:0:7}
             
 
 #   deploy-frontend:
