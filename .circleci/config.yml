@@ -193,6 +193,8 @@ jobs:
       - image: sleavely/node-awscli:14.x
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Run migrations
           command: |
@@ -224,8 +226,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
       - attach_workspace:
           at: ~/   
       - run:
