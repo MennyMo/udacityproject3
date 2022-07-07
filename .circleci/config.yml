@@ -199,7 +199,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:16.10.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -209,7 +209,6 @@ jobs:
           command: |
             cd backend
             npm install
-            # ncu --upgrade
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to KVdb
