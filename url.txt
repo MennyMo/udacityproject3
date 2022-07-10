@@ -1,13 +1,13 @@
 https://github.com/MennyMo/udacityproject3
 
 Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
-  http://udapeople-bd20194.s3-website-us-east-1.amazonaws.com/
+http://udapeople-3c6ab92c.s3-website-us-east-1.amazonaws.com/#/employees
 
 Public URL for your CloudFront distribution (aka, your blue production front-end) [URL03]
-http://knzmo1jvq672b.cloudfront.net
+d2bom10sin0z65.cloudfront.net
 
 Public URLs to deployed application back-end in EC2 [URL04]
-  http://54.163.147.80:3030/api/status
+http://ec2-54-159-194-44:3030/api/status
 
 Public URL to your Prometheus Server [URL05]
-http://ec2-44-201-196-249.compute-1.amazonaws.com:9090/
+http://ec2-54-159-194-44.compute-1.amazonaws.com:9090/
